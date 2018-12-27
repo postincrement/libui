@@ -47,12 +47,29 @@ _UI_ENUM(uiForEach) {
 
 typedef struct uiInitOptions uiInitOptions;
 
+/**
+ * \struct uiInitOptions
+ */
 struct uiInitOptions {
 	size_t Size;
 };
 
+/**
+ *  \brief Initialize the libui library
+ *  @param options options to initialize with
+ *  @see uiInitOptions
+ *  @return NULL if initialzation succeeded, else pointer to string with error message. Use uiFreeInitError to free storage used by string
+ */
 _UI_EXTERN const char *uiInit(uiInitOptions *options);
+
+/**
+*  \brief Uninitiaize the libui library
+*/
 _UI_EXTERN void uiUninit(void);
+
+/**
+*  \brief Free the storage used by a string returned from uiFreeInitError
+*/
 _UI_EXTERN void uiFreeInitError(const char *err);
 
 _UI_EXTERN void uiMain(void);
