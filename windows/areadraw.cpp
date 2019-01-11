@@ -50,7 +50,8 @@ static HRESULT doPaint(uiArea *a, ID2D1RenderTarget *rt, RECT *clip)
 	bgcolor.a = 1.0;
 	rt->Clear(&bgcolor);
 
-	(*(ah->Draw))(ah, a, &dp);
+  if (ah->Draw)
+  	(*(ah->Draw))(ah, a, &dp);
 
 	freeContext(dp.Context);
 

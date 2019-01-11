@@ -162,7 +162,7 @@ void uiUninit(void)
 
 void uiFreeInitError(const char *err)
 {
-	if (*(err - 1) == '-')
+	if ((err != NULL) && (*(err - 1) == '-'))
 		uiprivFree((void *) (err - 1));
 }
 

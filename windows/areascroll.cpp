@@ -134,6 +134,8 @@ static void hscrollParams(uiArea *a, struct scrollParams *p)
 	p->wheelSPIAction = SPI_GETWHEELSCROLLCHARS;
 }
 
+// function is not used
+#if 0
 static void hscrollto(uiArea *a, int pos)
 {
 	struct scrollParams p;
@@ -141,6 +143,7 @@ static void hscrollto(uiArea *a, int pos)
 	hscrollParams(a, &p);
 	scrollto(a, SB_HORZ, &p, pos);
 }
+#endif
 
 static void hscrollby(uiArea *a, int delta)
 {
@@ -179,6 +182,8 @@ static void vscrollParams(uiArea *a, struct scrollParams *p)
 	p->wheelSPIAction = SPI_GETWHEELSCROLLLINES;
 }
 
+// function is not used
+#if 0
 static void vscrollto(uiArea *a, int pos)
 {
 	struct scrollParams p;
@@ -186,6 +191,7 @@ static void vscrollto(uiArea *a, int pos)
 	vscrollParams(a, &p);
 	scrollto(a, SB_VERT, &p, pos);
 }
+#endif
 
 static void vscrollby(uiArea *a, int delta)
 {

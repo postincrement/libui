@@ -91,11 +91,13 @@ static void areaMouseEvent(uiArea *a, int down, int  up, WPARAM wParam, LPARAM l
 		inClient = PtInRect(&client, clientpt);
 		if (inClient && !a->inside) {
 			a->inside = TRUE;
-			(*(a->ah->MouseCrossed))(a->ah, a, 0);
+      if (a->ah->MouseCrossed)
+  			(*(a->ah->MouseCrossed))(a->ah, a, 0);
 			uiprivClickCounterReset(&(a->cc));
 		} else if (!inClient && a->inside) {
 			a->inside = FALSE;
-			(*(a->ah->MouseCrossed))(a->ah, a, 1);
+      if (a->ah->MouseCrossed)
+        (*(a->ah->MouseCrossed))(a->ah, a, 1);
 			uiprivClickCounterReset(&(a->cc));
 		}
 	}
@@ -151,7 +153,8 @@ static void areaMouseEvent(uiArea *a, int down, int  up, WPARAM wParam, LPARAM l
 	if (me.Up != 0 && me.Held1To64 == 0)
 		capture(a, FALSE);
 
-	(*(a->ah->MouseEvent))(a->ah, a, &me);
+  if (a->ah->MouseEvent)
+  	(*(a->ah->MouseEvent))(a->ah, a, &me);
 }
 
 // TODO genericize this so it can be called above
@@ -162,7 +165,8 @@ static void onMouseEntered(uiArea *a)
 	if (a->capturing)		// we handle mouse crossing in areaMouseEvent()
 		return;
 	track(a, TRUE);
-	(*(a->ah->MouseCrossed))(a->ah, a, 0);
+  if (a->ah->MouseCrossed)
+  	(*(a->ah->MouseCrossed))(a->ah, a, 0);
 	// TODO figure out why we did this to begin with; either we do it on both GTK+ and Windows or not at all
 	uiprivClickCounterReset(&(a->cc));
 }
@@ -172,7 +176,8 @@ static void onMouseLeft(uiArea *a)
 {
 	a->tracking = FALSE;
 	a->inside = FALSE;
-	(*(a->ah->MouseCrossed))(a->ah, a, 1);
+  if (a->ah->MouseCrossed)
+  	(*(a->ah->MouseCrossed))(a->ah, a, 1);
 	// TODO figure out why we did this to begin with; either we do it on both GTK+ and Windows or not at all
 	uiprivClickCounterReset(&(a->cc));
 }
@@ -254,6 +259,9 @@ static const struct {
 
 static int areaKeyEvent(uiArea *a, int up, WPARAM wParam, LPARAM lParam)
 {
+  if (!a->ah->KeyEvent)
+    return 0;
+
 	uiAreaKeyEvent ke;
 	int righthand;
 	int i;
@@ -306,7 +314,7 @@ static int areaKeyEvent(uiArea *a, int up, WPARAM wParam, LPARAM lParam)
 	// not a supported key, assume unhandled
 	// TODO the original code only did this if ke.Modifiers == 0 - why?
 	return 0;
-
+ 
 keyFound:
 	return (*(a->ah->KeyEvent))(a->ah, a, &ke);
 }
@@ -381,7 +389,8 @@ BOOL areaDoEvents(uiArea *a, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *l
 	case WM_CAPTURECHANGED:
 		if (a->capturing) {
 			a->capturing = FALSE;
-			(*(a->ah->DragBroken))(a->ah, a);
+      if (a->ah->DragBroken)
+  			(*(a->ah->DragBroken))(a->ah, a);
 		}
 		*lResult = 0;
 		return TRUE;
